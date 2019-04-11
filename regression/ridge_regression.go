@@ -20,8 +20,6 @@ func NewRidgeRegression(fitIntercept bool, alpha float64) *RidgeRegression {
 }
 
 func (rr *RidgeRegression) Fit(X *mat.Dense, t *mat.VecDense) {
-	matPrint(X)
-	matPrint(t)
 	rows, cols := X.Dims()
 	rr.features = cols
 	if rr.fitIntercept {
@@ -38,13 +36,9 @@ func (rr *RidgeRegression) Fit(X *mat.Dense, t *mat.VecDense) {
 	ones.ScaleVec(rr.alpha, ones)
 
 	id_mtrx := mat.NewDiagDense(cols, ones.RawVector().Data)
-	matPrint(id_mtrx)
-	matPrint(X.T())
 	x_add := new(mat.Dense)
 	x_add.Mul(X.T(), X)
-	matPrint(x_add)
 	x_add.Add(id_mtrx, x_add)
-	matPrint(x_add)
 
 	weight := new(mat.Dense)
 	weight.Mul(X.T(), t)
@@ -52,7 +46,6 @@ func (rr *RidgeRegression) Fit(X *mat.Dense, t *mat.VecDense) {
 	if err := weight.Solve(x_add, weight); err != nil {
 		panic(err)
 	}
-	matPrint(weight)
 
 	rr.weights = weight.RawMatrix().Data
 	rr.isFitted = true

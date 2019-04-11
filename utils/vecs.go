@@ -1,6 +1,9 @@
 package utils
 
-import "gonum.org/v1/gonum/mat"
+import (
+	"fmt"
+	"gonum.org/v1/gonum/mat"
+)
 
 func Ones(n int) *mat.VecDense {
 	ones := mat.NewVecDense(n, nil)
@@ -19,4 +22,9 @@ func (evd *ExtendedVecDense) ScalarAdd(val float64) {
 	for i := 0; i < r; i++ {
 		evd.SetVec(i, val+evd.At(i, 0))
 	}
+}
+
+func matPrint(X mat.Matrix) {
+	fa := mat.Formatted(X, mat.Prefix(""), mat.Squeeze())
+	fmt.Printf("%v\n\n", fa)
 }

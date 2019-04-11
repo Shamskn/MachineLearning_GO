@@ -2,7 +2,6 @@ package regression
 
 import (
 	"MachineLearning_GO/utils"
-	"fmt"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -20,15 +19,8 @@ func NewLinearRegression(fitIntercept bool) *LinearRegression {
 	}
 }
 
-func matPrint(X mat.Matrix) {
-	fa := mat.Formatted(X, mat.Prefix(""), mat.Squeeze())
-	fmt.Printf("%v\n\n", fa)
-}
-
 func (lr *LinearRegression) Fit(X *mat.Dense, t *mat.VecDense) {
 	//w = np.inv(X.T @ X) @ X.T @ t
-	matPrint(X)
-	matPrint(t)
 	rows, cols := X.Dims()
 	lr.features = cols
 	if lr.fitIntercept {
@@ -47,11 +39,9 @@ func (lr *LinearRegression) Fit(X *mat.Dense, t *mat.VecDense) {
 	//}
 	// calculating the moore penrose pseudo inverse
 	pinv := utils.Pinv(x_inv)
-	matPrint(pinv)
 
 	weight := new(mat.Dense)
 	weight.Product(pinv, X.T(), t)
-	matPrint(weight)
 
 	lr.weights = weight.RawMatrix().Data
 	lr.isFitted = true
@@ -74,6 +64,5 @@ func (lr *LinearRegression) Predict(X *mat.Dense) *mat.VecDense {
 	} else {
 		pred.MulVec(X, mat.NewVecDense(lr.features, lr.weights))
 	}
-	matPrint(pred)
 	return pred
 }
